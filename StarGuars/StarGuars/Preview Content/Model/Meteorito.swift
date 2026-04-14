@@ -69,22 +69,22 @@ class Meteorito: Sprite, Identifiable {
     
     // MARK: - Initialization
     
-    override init(center: CGPoint, width: CGFloat, height: CGFloat) {
+    init(center: CGPoint, playfieldSize: CGSize, meteorSize: CGFloat) {
         self.speed = CGFloat.random(in: Constants.baseSpeed)
         self.iconColor = Bool.random() ? .red : .orange
         self.rotation = Double.random(in: Constants.baseRotation)
         
-        let meteoritoSize = min(width, height) * Constants.baseSize
-        super.init(center: center, width: meteoritoSize, height: meteoritoSize)
+        let gameBounds = CGRect(origin: .zero, size: playfieldSize)
+        super.init(center: center, width: meteorSize, height: meteorSize, gameBounds: gameBounds)
         updateCollisionFrame()
     }
     
-    convenience init(center: CGPoint, width: CGFloat, height: CGFloat, isSpecial: Bool, isZigzag: Bool = false, isBig: Bool = false, speedMultiplier: CGFloat = 1.0, currentLevel: Int = 1) {
-        self.init(center: center, width: width, height: height)
+    convenience init(center: CGPoint, playfieldSize: CGSize, meteorSize: CGFloat, isSpecial: Bool, isZigzag: Bool = false, isBig: Bool = false, speedMultiplier: CGFloat = 1.0, currentLevel: Int = 1) {
+        self.init(center: center, playfieldSize: playfieldSize, meteorSize: meteorSize)
         self.currentLevel = currentLevel
         
         configureSpeed(currentLevel: currentLevel)
-        configureType(isSpecial: isSpecial, isZigzag: isZigzag, isBig: isBig, width: width)
+        configureType(isSpecial: isSpecial, isZigzag: isZigzag, isBig: isBig, width: playfieldSize.width)
     }
     
     // MARK: - Configuration Methods
@@ -180,8 +180,8 @@ class Meteorito: Sprite, Identifiable {
         
         return Meteorito(
             center: CGPoint(x: x, y: y),
-            width: actualSize,
-            height: actualSize,
+            playfieldSize: size,
+            meteorSize: actualSize,
             isSpecial: isSpecial,
             isZigzag: isZigzag,
             isBig: isBig,
@@ -275,7 +275,7 @@ class Meteorito: Sprite, Identifiable {
         
         let currentTime = CACurrentMediaTime()
         if currentTime - lastCollisionUpdate >= Constants.collisionUpdateInterval {
-            if center.y >= -height && center.y <= UIScreen.main.bounds.height + height {
+            if center.y >= -height && center.y <= maxY + height {
                 updateCollisionFrame()
                 lastCollisionUpdate = currentTime
             }

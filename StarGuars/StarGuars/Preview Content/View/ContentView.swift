@@ -141,84 +141,77 @@ struct ContentView: View {
                 
                 // User interface (always above game elements)
                 VStack {
-                    HStack {
-                        // Score
-                        HStack(spacing: 0) {
-                            Text("Points: ")
-                                .font(.headline.monospaced())
-                                .bold()
-                                .foregroundColor(.white)
-                            Text("\(viewModel.score)")
-                                .font(.headline.monospaced())
-                                .bold()
-                                .foregroundColor(.white)
-                                .contentTransition(.numericText())
-                                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: viewModel.score)
-                        }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.gray.opacity(0.6))
-                        )
-                        .zIndex(10) // Make sure it's above everything
-                        
-                        // Pause button
-                        Button(action: {
-                            // Haptic feedback when pausing
-                            let pauseFeedback = UIImpactFeedbackGenerator(style: .medium)
-                            pauseFeedback.prepare()
-                            pauseFeedback.impactOccurred()
+                    GlassEffectContainer(spacing: 12) {
+                        HStack {
+                            // Score
+                            HStack(spacing: 0) {
+                                Text("Points: ")
+                                    .font(.headline.monospaced())
+                                    .bold()
+                                    .foregroundColor(.white)
+                                Text("\(viewModel.score)")
+                                    .font(.headline.monospaced())
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .contentTransition(.numericText())
+                                    .animation(.spring(response: 0.5, dampingFraction: 0.8), value: viewModel.score)
+                            }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 12)
+                            .glassEffect(.regular.interactive(false), in: RoundedRectangle(cornerRadius: 26, style: .continuous))
+                            .zIndex(10) // Make sure it's above everything
                             
-                            viewModel.pauseGame()
-                            isPauseSheet = true
-                            showStartSheet = true
-                        }) {
-                            Image(systemName: "pause.circle.fill")
-                                .symbolRenderingMode(.hierarchical)
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .frame(width: 20, height: 20)
-                                .padding(.vertical, 10)
-                                .padding(.horizontal, 12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.gray.opacity(0.6))
-                                )
+                            // Pause button
+                            Button(action: {
+                                // Haptic feedback when pausing
+                                let pauseFeedback = UIImpactFeedbackGenerator(style: .medium)
+                                pauseFeedback.prepare()
+                                pauseFeedback.impactOccurred()
+                                
+                                viewModel.pauseGame()
+                                isPauseSheet = true
+                                showStartSheet = true
+                            }) {
+                                Image(systemName: "pause.circle.fill")
+                                    .symbolRenderingMode(.hierarchical)
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .frame(width: 20, height: 20)
+                                    .padding(.vertical, 10)
+                                    .padding(.horizontal, 12)
+                            }
+                            .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 26, style: .continuous))
+                            .zIndex(10) // Make sure it's above everything
+                            
+                            Spacer()
+                            
+                            // Level with golden effect
+                            HStack(spacing: 0) {
+                                Text("Level ")
+                                    .font(.headline.monospaced())
+                                    .bold()
+                                    .foregroundColor(showGoldenEffect ? Color(red: 1.0, green: 0.84, blue: 0.0) : .white)
+                                Text("\(viewModel.level)")
+                                    .font(.headline.monospaced())
+                                    .bold()
+                                    .foregroundColor(showGoldenEffect ? Color(red: 1.0, green: 0.84, blue: 0.0) : .white)
+                                    .contentTransition(.numericText())
+                                    .animation(.spring(response: 0.5, dampingFraction: 0.8), value: viewModel.level)
+                            }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 12)
+                            .glassEffect(.regular.interactive(false), in: RoundedRectangle(cornerRadius: 26, style: .continuous))
+                            .scaleEffect(levelChanged ? 1.2 : 1.0)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: levelChanged)
+                            .overlay(
+                                showGoldenEffect ?
+                                    RoundedRectangle(cornerRadius: 26, style: .continuous)
+                                        .strokeBorder(Color(red: 1.0, green: 0.84, blue: 0.0), lineWidth: 2)
+                                        .opacity(showGoldenEffect ? 1 : 0)
+                                : nil
+                            )
+                            .zIndex(10) // Make sure it's above everything
                         }
-                        .zIndex(10) // Make sure it's above everything
-                        
-                        Spacer()
-                        
-                        // Level with golden effect
-                        HStack(spacing: 0) {
-                            Text("Level ")
-                                .font(.headline.monospaced())
-                                .bold()
-                                .foregroundColor(showGoldenEffect ? Color(red: 1.0, green: 0.84, blue: 0.0) : .white)
-                            Text("\(viewModel.level)")
-                                .font(.headline.monospaced())
-                                .bold()
-                                .foregroundColor(showGoldenEffect ? Color(red: 1.0, green: 0.84, blue: 0.0) : .white)
-                                .contentTransition(.numericText())
-                                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: viewModel.level)
-                        }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.gray.opacity(0.6))
-                        )
-                        .scaleEffect(levelChanged ? 1.2 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: levelChanged)
-                        .overlay(
-                            showGoldenEffect ?
-                                RoundedRectangle(cornerRadius: 10)
-                                    .strokeBorder(Color(red: 1.0, green: 0.84, blue: 0.0), lineWidth: 2)
-                                    .opacity(showGoldenEffect ? 1 : 0)
-                            : nil
-                        )
-                        .zIndex(10) // Make sure it's above everything
                     }
                     .padding(.top, 60)
                     .padding(.horizontal)
@@ -359,7 +352,7 @@ struct StartView: View {
                         .padding(.bottom, 10)
                     
                     ShipNameText(name: shipNames[selectedShip] ?? "")
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 24)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         ScrollViewReader { proxy in
@@ -378,14 +371,14 @@ struct StartView: View {
                                         ZStack {
                                             // Background for the box (gray for unselected, AnimatedMeshGradient for selected)
                                             if selectedShip == ship {
-                                                AnimatedMeshGradient(cornerRadius: 12, size: CGSize(width: 90, height: 90))
+                                                AnimatedMeshGradient(cornerRadius: 26, size: CGSize(width: 90, height: 90))
                                                     .frame(width: 90, height: 90)
                                             } else {
-                                                RoundedRectangle(cornerRadius: 12)
+                                                RoundedRectangle(cornerRadius: 26)
                                                     .fill(Color.gray.opacity(0.1))
                                                     .frame(width: 90, height: 90)
                                                     .background(
-                                                        RoundedRectangle(cornerRadius: 12)
+                                                        RoundedRectangle(cornerRadius: 26)
                                                             .fill(Color.white.opacity(0.05))
                                                             .shadow(color: .gray.opacity(0.2), radius: 2, x: 0, y: 1)
                                                     )
@@ -393,7 +386,7 @@ struct StartView: View {
                                             
                                             // Border for selected ship
                                             if selectedShip == ship {
-                                                RoundedRectangle(cornerRadius: 10)
+                                                RoundedRectangle(cornerRadius: 26)
                                                     .strokeBorder(Color.white.opacity(0.9), lineWidth: 2.5)
                                                     .frame(width: 86, height: 86)
                                                     .transition(.opacity)
@@ -413,6 +406,7 @@ struct StartView: View {
                                 }
                             }
                             .padding(.horizontal)
+                            .padding(.vertical, 10)
                             .onAppear {
                                 // Center on the selected ship when the ScrollView appears
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -428,7 +422,8 @@ struct StartView: View {
                             }
                         }
                         .scrollTargetBehavior(.viewAligned)
-                        .padding(.bottom, 20)
+                        .frame(height: 120)
+                        .padding(.bottom, 28)
                     }
                 }
                 
@@ -450,7 +445,7 @@ struct StartView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 15)
                         .background(Color.indigo.gradient)
-                        .cornerRadius(10)
+                        .cornerRadius(26)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, geometry.safeAreaInsets.bottom + 15)
@@ -660,10 +655,12 @@ struct InfoCard: View {
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 16)
-                .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
-                .background(Color.gray.opacity(0.05))
-                .cornerRadius(16)
+            RoundedRectangle(cornerRadius: 26)
+                .fill(Color.gray.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 26)
+                        .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
+                )
         )
     }
 }

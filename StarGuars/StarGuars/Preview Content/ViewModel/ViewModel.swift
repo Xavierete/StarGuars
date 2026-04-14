@@ -248,7 +248,7 @@ class ViewModel: ObservableObject {
         
         if RedLine.shouldGenerateLaser(forLevel: level) {
             canGenerateLaser = false
-            let redLine = RedLine(screenWidth: size.width)
+            let redLine = RedLine(screenWidth: size.width, screenHeight: size.height)
             redLines.append(redLine)
             
             let cooldown = RedLine.getCooldownDuration(forLevel: level)
@@ -269,7 +269,7 @@ class ViewModel: ObservableObject {
         if let size = gameSize {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                if let levelUpLaser = RedLine.generateLevelUpLaser(screenWidth: size.width, level: self.level) {
+                if let levelUpLaser = RedLine.generateLevelUpLaser(screenWidth: size.width, screenHeight: size.height, level: self.level) {
                     self.redLines.append(levelUpLaser)
                     
                     let cooldown = RedLine.getCooldownDuration(forLevel: self.level)

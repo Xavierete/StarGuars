@@ -367,7 +367,7 @@ struct HighScoresView: View {
         .padding(.horizontal, 20)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 26)
                 .fill(Color.black.opacity(0.5))
                 .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
         )

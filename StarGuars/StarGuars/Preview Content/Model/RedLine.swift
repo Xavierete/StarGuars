@@ -92,17 +92,19 @@ class RedLine: Sprite, Identifiable {
                   Constants.minCooldown)
     }
     
-    static func generateLevelUpLaser(screenWidth: CGFloat, level: Int) -> RedLine? {
+    static func generateLevelUpLaser(screenWidth: CGFloat, screenHeight: CGFloat, level: Int) -> RedLine? {
         guard level >= 9 else { return nil }
-        return RedLine(screenWidth: screenWidth)
+        return RedLine(screenWidth: screenWidth, screenHeight: screenHeight)
     }
     
     // MARK: - Initialization
-    init(screenWidth: CGFloat) {
+    init(screenWidth: CGFloat, screenHeight: CGFloat) {
         let xPosition = CGFloat.random(in: Constants.safeMargin...(screenWidth - Constants.safeMargin))
+        let gameBounds = CGRect(origin: .zero, size: CGSize(width: screenWidth, height: screenHeight))
         super.init(center: CGPoint(x: xPosition, y: 0), 
                   width: screenWidth, 
-                  height: UIScreen.main.bounds.height)
+                  height: screenHeight,
+                  gameBounds: gameBounds)
         
         startAnimation()
     }
@@ -221,7 +223,7 @@ class RedLine: Sprite, Identifiable {
                 x: center.x - beamWidth/2,
                 y: 0,
                 width: beamWidth,
-                height: UIScreen.main.bounds.height
+                height: gameBounds.height
             )
             
             let sideLineRects = getSideLineRects()
@@ -239,14 +241,14 @@ class RedLine: Sprite, Identifiable {
             x: center.x - (beamWidth/2 + sideLineOffset + Constants.sideLineWidth),
             y: 0,
             width: Constants.sideLineWidth,
-            height: UIScreen.main.bounds.height
+            height: gameBounds.height
         )
         
         let right = CGRect(
             x: center.x + (beamWidth/2 + sideLineOffset),
             y: 0,
             width: Constants.sideLineWidth,
-            height: UIScreen.main.bounds.height
+            height: gameBounds.height
         )
         
         return (left, right)

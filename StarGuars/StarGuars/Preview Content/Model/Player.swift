@@ -6,16 +6,17 @@ class Player: Sprite {
     var selectedShipImage: String = "starship3"
     var isPaused: Bool = false
     
-    override init(center: CGPoint, width: CGFloat, height: CGFloat) {
+    init(center: CGPoint, width: CGFloat, height: CGFloat) {
         let playerWidth: CGFloat = min(width, height) * 0.15
         let playerHeight: CGFloat = playerWidth
+        let gameBounds = CGRect(origin: .zero, size: CGSize(width: width, height: height))
         
         let initialCenter = CGPoint(
             x: width / 2,
             y: height * 0.75
         )
         
-        super.init(center: initialCenter, width: playerWidth, height: playerHeight)
+        super.init(center: initialCenter, width: playerWidth, height: playerHeight, gameBounds: gameBounds)
         
         self.center = CGPoint(
             x: (maxX + minX) / 2,

@@ -7,6 +7,7 @@ class Sprite {
     var center: CGPoint
     var width: CGFloat
     var height: CGFloat
+    let gameBounds: CGRect
     
     // MARK: - Computed Properties
     var frame: CGRect {
@@ -17,16 +18,17 @@ class Sprite {
     }
     
     // MARK: - Screen Boundaries
-    let minX = UIScreen.main.bounds.minX
-    let maxX = UIScreen.main.bounds.maxX
-    let minY = UIScreen.main.bounds.minY
-    let maxY = UIScreen.main.bounds.maxY
+    var minX: CGFloat { gameBounds.minX }
+    var maxX: CGFloat { gameBounds.maxX }
+    var minY: CGFloat { gameBounds.minY }
+    var maxY: CGFloat { gameBounds.maxY }
     
     // MARK: - Initialization
-    init(center: CGPoint, width: CGFloat, height: CGFloat) {
+    init(center: CGPoint, width: CGFloat, height: CGFloat, gameBounds: CGRect) {
         self.center = center
         self.width = width
         self.height = height
+        self.gameBounds = gameBounds
     }
     
     // MARK: - Collision Methods
