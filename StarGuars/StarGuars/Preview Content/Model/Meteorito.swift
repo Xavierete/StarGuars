@@ -19,6 +19,7 @@ class Meteorito: Sprite, Identifiable {
         static let bigSizeMultiplier: CGFloat = 1.5
         static let collisionMargin: CGFloat = 5.0
         static let collisionUpdateInterval: CFTimeInterval = 1.0 / 30.0
+        static let bottomExitPaddingMultiplier: CGFloat = 0.9
         
         // Velocidad
         static let specialSpeedMultiplier: CGFloat = 1.2
@@ -267,7 +268,7 @@ class Meteorito: Sprite, Identifiable {
     // MARK: - Collision Handling
     
     override func checkScreenCollision() -> Bool {
-        return center.y > maxY
+        return center.y - (height / 2) > maxY + (height * Constants.bottomExitPaddingMultiplier)
     }
     
     override func checkCollisionWith(_ frame: CGRect) -> Bool {
